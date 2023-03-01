@@ -1,0 +1,7 @@
+football_statistics.display:
+  path: '/display-stats'
+  defaults:
+    _controller: 'Drupal\football_statistics\Controller\StatisticsDisplay::view'
+    _title: 'Statistics Display'
+  requirements:
+    _permission: 'access content'

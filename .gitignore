@@ -8,6 +8,7 @@
 # Ignore configuration files that may contain sensitive information
 /web/sites/*/*settings*.php
 /web/sites/*/*services*.yml
+/web/modules/custom/football_statistics/football_stats.info.yml
 
 # Ignore paths that may contain user-generated content
 /web/sites/*/files

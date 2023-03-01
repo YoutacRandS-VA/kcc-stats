@@ -1,0 +1,6 @@
+name: Football Statisics
+description: Allow users to search for statistics for Kansas City Chiefs players
+package: CustomModules
+
+type: module
+core_version_requirement: ^9.0 || ^10.0
