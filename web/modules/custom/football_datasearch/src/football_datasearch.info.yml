@@ -1,0 +1,6 @@
+name: Football DataSearch
+description: Allow users to search data from the NFL via an API and search bar
+package: CustomModules
+
+type: module
+core_version_requirement: ^9.0 || ^10.0
