@@ -6,7 +6,6 @@
   use Drupal\Core\Form\FormBase;
   use Drupal\Core\Form\FormStateInterface;
   use Drupal\Core\Http\ClientFactory;
-  use GuzzleHttp\Client;
   use Symfony\Component\DependencyInjection\ContainerInterface;
   /*Defines a form that allows users to search data from an external API.*/
   class FootballDataSearch extends FormBase{
@@ -54,21 +53,30 @@
       return $form;
     }
 
-    //Handle form submission
-    //&$form value is inherited from $form in the buildForm() function
-    public function submitForm(array &$form, FormStateInterface $form_state){
-      //Create a Guzzle client object
-      $client = new Client();
+    public function football_search_data($search_query, FormStateInterface $form_state){
       $search_query = $form_state->getValue('search');
 
-      //Send a response
-      $response = $client->request('GET', 'https://nfl-team-stats1.p.rapidapi.com/teamStats/search', [
-        'query' =>[
-            'q' => $search_query,
-            'key' => '407db46b8emsh3c9961abad4d562p1a6ff4jsn6e0efb102d31'
-        ]
-      ]);
+      //Define a unique cache ID based on the search query.
+      $cache_id = 'football_search_data:' . $search_query;
 
+      //Try to retrieve the cached data.
+      $cache = \Drupal::cache()->get($cache_id);
+
+      if(!$cache || $cache->isExpired()){
+        $api_data = fetch_data_from_api($search_query);
+        \Drupal::cache()->set($cache_id, $api_data, time() + 3600, ['football_search_data']);
+
+        return $api_data;
+      }
+
+      //If the data isn't cached, return it.
+      return $cache->data;
+    }
+
+    //Handle form submission
+    //&$form value is inherited from $form in the buildForm() function
+    public function submitForm(array &$form){
+      football_search_data();
       //Convert the JSON response object to a String
       $data = json_decode($response->getBody());
 
